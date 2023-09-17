@@ -5,11 +5,21 @@ const User = require("./models/User");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
+
+const Post = require("./models/Post");
+
+const fs = require("fs");
+
+const multer = require("multer");
+const uploadmiddleware = multer({ dest: "uploads/" });
+
 const cookiParser = require("cookie-parser");
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 app.use(express.json());
 app.use(cookiParser());
+
+app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const salt = bcrypt.genSaltSync(10);
 const secret = "sgsjwsuuwiwmsbbshhhhhhhhslhsv";
@@ -60,6 +70,46 @@ app.get("/profile", (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
+});
+
+app.post("/post", uploadmiddleware.single("file"), async (req, res) => {
+  const { originalname, path } = req.file;
+  const parts = originalname.split(".");
+  const ext = parts[parts.length - 1];
+  const newPath = path + "." + ext;
+  fs.renameSync(path, newPath);
+
+  const { token } = req.cookies;
+  if (token) {
+    jwt.verify(token, secret, {}, async (err, info) => {
+      if (err) throw err;
+      const { title, summary, content } = req.body;
+      const postDoc = await Post.create({
+        title,
+        summary,
+        content,
+        cover: newPath,
+        author: info.id,
+      });
+      res.json(postDoc);
+    });
+  }
+});
+
+app.get("/post", async (req, res) => {
+  res.json(
+    await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .limit(20)
+  );
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await Post.findById(id).populate("author", ["username"]);
+
+  res.json(postDoc);
 });
 
 app.post("/logout", (req, res) => {
