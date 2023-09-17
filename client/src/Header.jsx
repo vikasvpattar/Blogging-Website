@@ -5,7 +5,7 @@ import { UserContext } from "./UserContexr";
 const Header = () => {
   const { setuserInfo, userInfo } = useContext(UserContext);
   useEffect(() => {
-    fetch("http://localhost:4000/profile", {
+    fetch(`"http://localhost:4000/profile"`, {
       credentials: "include",
     }).then((response) => {
       response.json().then((userInfo) => {
@@ -31,7 +31,7 @@ const Header = () => {
       <nav>
         {username && (
           <>
-            <Link to="create">Create New Post</Link>
+            <Link to="create">Create new post</Link>
             <a onClick={logout}>Logout</a>
           </>
         )}

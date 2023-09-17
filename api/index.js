@@ -6,6 +6,9 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
+const dotenv = require("dotenv");
+dotenv.config();
+
 const Post = require("./models/Post");
 
 const fs = require("fs");
@@ -14,7 +17,7 @@ const multer = require("multer");
 const uploadmiddleware = multer({ dest: "uploads/" });
 
 const cookiParser = require("cookie-parser");
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 
 app.use(express.json());
 app.use(cookiParser());
@@ -22,10 +25,8 @@ app.use(cookiParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 const salt = bcrypt.genSaltSync(10);
-const secret = "sgsjwsuuwiwmsbbshhhhhhhhslhsv";
-mongoose.connect(
-  "mongodb+srv://vikasvpattar18:vikas123@cluster0.7jlk873.mongodb.net/?retryWrites=true&w=majority"
-);
+const secret = process.env.SECRETE;
+mongoose.connect(process.env.MONGO_LINK);
 
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
@@ -96,6 +97,36 @@ app.post("/post", uploadmiddleware.single("file"), async (req, res) => {
   }
 });
 
+app.put("/post", uploadmiddleware.single("file"), async (req, res) => {
+  let newPath = null;
+  if (req.file) {
+    const { originalname, path } = req.file;
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+  }
+
+  const { token } = req.cookies;
+  jwt.verify(token, secret, {}, async (err, info) => {
+    if (err) throw err;
+    const { id, title, summary, content } = req.body;
+    const postDoc = await Post.findById(id);
+    const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
+    if (!isAuthor) {
+      return res.status(400).json("you are not the author");
+    }
+    await postDoc.updateOne({
+      title,
+      summary,
+      content,
+      cover: newPath ? newPath : postDoc.cover,
+    });
+
+    res.json(postDoc);
+  });
+});
+
 app.get("/post", async (req, res) => {
   res.json(
     await Post.find()
@@ -116,7 +147,4 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
 
-app.listen(4000, () => console.log("server started"));
-
-// mongodb+srv://vikasvpattar18:vikas123@cluster0.7jlk873.mongodb.net/?retryWrites=true&w=majority
-// mongo pass vikas123
+app.listen(process.env.API_PORT, () => console.log("server started"));

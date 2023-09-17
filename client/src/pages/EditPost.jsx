@@ -1,25 +1,39 @@
-import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
-import Editor from "../Editor";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import React, { useEffect, useState } from "react";
+import { Navigate, useParams } from "react-router-dom";
 
-const CreatePost = () => {
+import Editor from "../Editor";
+
+const EditPost = () => {
+  const { id } = useParams();
   const [title, settitle] = useState("");
   const [summary, setsummary] = useState("");
   const [content, setcontent] = useState("");
   const [files, setFiles] = useState("");
+  const [cover, setCover] = useState("");
   const [redirect, setRedirect] = useState(false);
-  async function createNewPost(e) {
+
+  useEffect(() => {
+    fetch("http://localhost:4000/post/" + id).then((response) => {
+      response.json().then((postInfo) => {
+        settitle(postInfo.title);
+        setcontent(postInfo.content);
+        setsummary(postInfo.summary);
+      });
+    });
+  }, []);
+
+  async function updatePost(e) {
+    e.preventDefault();
     const data = new FormData();
     data.set("title", title);
     data.set("summary", summary);
     data.set("content", content);
-    data.set("file", files[0]);
-    e.preventDefault();
-
+    data.set("id", id);
+    if (files?.[0]) {
+      data.set("file", files?.[0]);
+    }
     const response = await fetch("http://localhost:4000/post", {
-      method: "POST",
+      method: "PUT",
       body: data,
       credentials: "include",
     });
@@ -27,12 +41,11 @@ const CreatePost = () => {
       setRedirect(true);
     }
   }
-
   if (redirect) {
-    return <Navigate to={"/"} />;
+    return <Navigate to={"/post/" + id} />;
   }
   return (
-    <form action="" onSubmit={createNewPost}>
+    <form action="" onSubmit={updatePost}>
       <input
         type="text"
         placeholder="Title"
@@ -45,15 +58,11 @@ const CreatePost = () => {
         value={summary}
         onChange={(e) => setsummary(e.target.value)}
       />
-      <input
-        type="file"
-        // value={files}
-        onChange={(e) => setFiles(e.target.files)}
-      />
+      <input type="file" onChange={(e) => setFiles(e.target.files)} />
       <Editor onChange={setcontent} value={content} />
-      <button style={{ marginTop: "5px" }}>Create Post</button>
+      <button style={{ marginTop: "5px" }}>Update Post</button>
     </form>
   );
 };
 
-export default CreatePost;
+export default EditPost;
