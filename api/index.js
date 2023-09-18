@@ -147,4 +147,7 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
 
-app.listen(process.env.API_PORT, () => console.log("server started"));
+if (process.env.API_PORT) {
+  app.listen(process.env.API_PORT, () => console.log("server started"));
+}
+module.exports = app;
