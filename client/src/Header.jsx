@@ -5,7 +5,7 @@ import { UserContext } from "./UserContexr";
 const Header = () => {
   const { setuserInfo, userInfo } = useContext(UserContext);
   useEffect(() => {
-    fetch(`"http://localhost:4000/profile"`, {
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/profile`, {
       credentials: "include",
     }).then((response) => {
       response.json().then((userInfo) => {
@@ -15,7 +15,7 @@ const Header = () => {
   }, []);
 
   function logout() {
-    fetch("http://localhost:4000/logout", {
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/logout`, {
       credentials: "include",
       method: "POST",
     });

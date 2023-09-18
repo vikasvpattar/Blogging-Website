@@ -9,12 +9,15 @@ const LoginPage = () => {
   const { setuserInfo } = useContext(UserContext);
   async function login(e) {
     e.preventDefault();
-    const response = await fetch("http://localhost:4000/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password }),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_API_URL}/login`,
+      {
+        method: "POST",
+        body: JSON.stringify({ username, password }),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
 
     if (response.ok) {
       response.json().then((userInfo) => {
@@ -33,18 +36,15 @@ const LoginPage = () => {
     <div>
       <form action="/login" className="login" onSubmit={login}>
         <h1>Login</h1>
+        {/* {console.log(import.meta.env.VITE_REACT_APP_API_URL)} */}
         <input
           type="text"
-          name=""
-          id=""
           placeholder="Username"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
         <input
           type="password"
-          name=""
-          id=""
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}

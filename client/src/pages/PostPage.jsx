@@ -8,11 +8,13 @@ const PostPage = () => {
   const { userInfo } = useContext(UserContext);
   const { id } = useParams();
   useEffect(() => {
-    fetch(`http://localhost:4000/post/${id}`).then((response) => {
-      response.json().then((postInfo) => {
-        setPostInfo(postInfo);
-      });
-    });
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/post/${id}`).then(
+      (response) => {
+        response.json().then((postInfo) => {
+          setPostInfo(postInfo);
+        });
+      }
+    );
   }, []);
 
   if (!postInfo) return "";
@@ -29,7 +31,10 @@ const PostPage = () => {
         </div>
       )}
       <div className="image">
-        <img src={`http://localhost:4000/${postInfo.cover}`} alt="" />
+        <img
+          src={`${import.meta.env.VITE_REACT_APP_API_URL}/${postInfo.cover}`}
+          alt=""
+        />
       </div>
 
       <div

@@ -7,7 +7,10 @@ const Post = ({ _id, title, summary, cover, content, createdAt, author }) => {
     <div className="post">
       <Link to={`/post/${_id}`}>
         <div className="image">
-          <img src={"http://localhost:4000/" + cover} alt="" />
+          <img
+            src={`${import.meta.env.VITE_REACT_APP_API_URL}/` + cover}
+            alt=""
+          />
         </div>
       </Link>
 

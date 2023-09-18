@@ -4,7 +4,7 @@ import Post from "../Post";
 const IndexPages = () => {
   const [posts, setPosts] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:4000/post").then((response) => {
+    fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/post`).then((response) => {
       response.json().then((posts) => {
         setPosts(posts);
       });
