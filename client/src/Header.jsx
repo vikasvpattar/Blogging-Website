@@ -7,11 +7,13 @@ const Header = () => {
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/profile`, {
       credentials: "include",
-    }).then((response) => {
-      response.json().then((userInfo) => {
+    })
+      .then((response) => {
+        response.json();
+      })
+      .then((userInfo) => {
         setuserInfo(userInfo);
       });
-    });
   }, []);
 
   function logout() {
@@ -26,7 +28,7 @@ const Header = () => {
   return (
     <header>
       <Link to="/" className="logo">
-        My Blog
+        Dev Blog
       </Link>
       <nav>
         {username && (
