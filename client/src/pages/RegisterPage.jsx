@@ -26,16 +26,14 @@ const RegisterPage = () => {
         <h1>Register</h1>
         <input
           type="text"
-          name=""
-          id=""
+         
           placeholder="Username"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
         <input
           type="password"
-          name=""
-          id=""
+    
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}
