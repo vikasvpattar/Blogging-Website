@@ -12,6 +12,7 @@ const EditPost = () => {
   const [cover, setCover] = useState("");
   const [redirect, setRedirect] = useState(false);
 
+  // the data of the post are fetched automatically when user clicks on edit button
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/post/` + id).then(
       (response) => {
@@ -23,7 +24,7 @@ const EditPost = () => {
       }
     );
   }, []);
-
+  // This function is invoked when update button is clicked
   async function updatePost(e) {
     e.preventDefault();
     const data = new FormData();
@@ -34,6 +35,7 @@ const EditPost = () => {
     if (files?.[0]) {
       data.set("file", files?.[0]);
     }
+    // api is fetched data from the backend
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_API_URL}/post`,
       {
@@ -46,6 +48,7 @@ const EditPost = () => {
       setRedirect(true);
     }
   }
+  // if redirect is true the user is moved to specific post
   if (redirect) {
     return <Navigate to={"/post/" + id} />;
   }

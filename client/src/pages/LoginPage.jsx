@@ -3,12 +3,16 @@ import { Navigate } from "react-router-dom";
 import { UserContext } from "../UserContexr";
 
 const LoginPage = () => {
+  // To store the username
   const [username, setUserName] = useState("");
+  // To store the password
   const [password, setPassword] = useState("");
   const [redirect, setredirect] = useState(false);
   const { setuserInfo } = useContext(UserContext);
+  // this function is invoked when login button is clicked
   async function login(e) {
     e.preventDefault();
+    // backend data is fetched
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_API_URL}/login`,
       {
@@ -28,7 +32,7 @@ const LoginPage = () => {
       alert("wrong credentials");
     }
   }
-
+  // If redirect is true then user is rendered to home page
   if (redirect) {
     return <Navigate to={"/"} />;
   }
@@ -36,7 +40,7 @@ const LoginPage = () => {
     <div>
       <form action="/login" className="login" onSubmit={login}>
         <h1>Login</h1>
-        {/* {console.log(import.meta.env.VITE_REACT_APP_API_URL)} */}
+
         <input
           type="text"
           placeholder="Username"

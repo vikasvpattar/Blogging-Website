@@ -2,8 +2,11 @@ import React from "react";
 import { useState } from "react";
 
 const RegisterPage = () => {
+  // To store username
   const [username, setUserName] = useState("");
+  // To store password
   const [password, setPassword] = useState("");
+  // when register button is clicked, this function is invoked
   async function register(e) {
     e.preventDefault();
     const response = await fetch(

@@ -7,6 +7,7 @@ const PostPage = () => {
   const [postInfo, setPostInfo] = useState(null);
   const { userInfo } = useContext(UserContext);
   const { id } = useParams();
+  // Data of the post is fetched automatically from the backend
   useEffect(() => {
     fetch(`${import.meta.env.VITE_REACT_APP_API_URL}/post/${id}`).then(
       (response) => {
@@ -17,6 +18,7 @@ const PostPage = () => {
     );
   }, []);
 
+  // If post info is not there then show nothing
   if (!postInfo) return "";
   return (
     <div className="post-page">

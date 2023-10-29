@@ -5,11 +5,17 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 
 const CreatePost = () => {
+  // To store the title
   const [title, settitle] = useState("");
+  // To store the summary
   const [summary, setsummary] = useState("");
+  // To store the content
   const [content, setcontent] = useState("");
+  // To store the thumbnail
   const [files, setFiles] = useState("");
   const [redirect, setRedirect] = useState(false);
+
+  // on form submission this function is invoked
   async function createNewPost(e) {
     const data = new FormData();
     data.set("title", title);
@@ -18,6 +24,7 @@ const CreatePost = () => {
     data.set("file", files[0]);
     e.preventDefault();
 
+    // api is fetched from backend to sore the data
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_API_URL}/post`,
       {
@@ -30,7 +37,7 @@ const CreatePost = () => {
       setRedirect(true);
     }
   }
-
+  // after submitting the data, user will be navigated to home page
   if (redirect) {
     return <Navigate to={"/"} />;
   }
@@ -48,11 +55,7 @@ const CreatePost = () => {
         value={summary}
         onChange={(e) => setsummary(e.target.value)}
       />
-      <input
-        type="file"
-        // value={files}
-        onChange={(e) => setFiles(e.target.files)}
-      />
+      <input type="file" onChange={(e) => setFiles(e.target.files)} />
       <Editor onChange={setcontent} value={content} />
       <button style={{ marginTop: "5px" }}>Create Post</button>
     </form>
