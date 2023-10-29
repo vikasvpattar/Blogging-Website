@@ -16,11 +16,11 @@ const fs = require("fs");
 const multer = require("multer");
 const uploadmiddleware = multer({ dest: "uploads/" });
 
-const cookiParser = require("cookie-parser");
+const cookieParser = require("cookie-parser");
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 
 app.use(express.json());
-app.use(cookiParser());
+app.use(cookieParser());
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
@@ -147,7 +147,8 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("ok");
 });
 
-if (process.env.API_PORT) {
-  app.listen(process.env.API_PORT, () => console.log("server started"));
-}
+const PORT = process.env.API_PORT || 4000;
+
+app.listen(PORT, () => console.log("server started"));
+
 module.exports = app;

@@ -15,9 +15,9 @@ const RegisterPage = () => {
       }
     );
     if (response.status === 200) {
-      alert("Registration sucessful");
+      alert("Registration successful");
     } else {
-      alert("Registration fail");
+      alert("Registration failed");
     }
   }
   return (
@@ -26,14 +26,12 @@ const RegisterPage = () => {
         <h1>Register</h1>
         <input
           type="text"
-         
           placeholder="Username"
           value={username}
           onChange={(e) => setUserName(e.target.value)}
         />
         <input
           type="password"
-    
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
           value={password}

@@ -23,6 +23,9 @@ header {
   margin-bottom: 50px;
   margin-top: 20px;
   align-items: center;
+  background-color: rgb(85, 87, 209, 0.9);
+  padding: 20px;
+  border-radius: 10px;
 }
 header a {
   text-decoration: none;

@@ -26,7 +26,7 @@ const Header = () => {
 
   const username = userInfo?.username;
   return (
-    <header>
+    <header className="header">
       <Link to="/" className="logo">
         Dev Blog
       </Link>
