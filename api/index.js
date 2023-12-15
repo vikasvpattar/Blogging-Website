@@ -41,11 +41,11 @@ app.use("/uploads", express.static(__dirname + "/uploads"));
 
 // To create encryption
 const salt = bcrypt.genSaltSync(10);
-const secret = process.env.SECRETE;
+const secret = `${process.env.SECRETE}`;
 
 // connecting the mongodb atlas using mongoose
 mongoose
-  .connect(process.env.MONGO_LINK)
+  .connect(`${process.env.MONGO_LINK}`)
   .then(() => console.log("DB connected"))
   .catch((err) => console.log(err));
 
