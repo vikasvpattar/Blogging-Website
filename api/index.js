@@ -31,8 +31,15 @@ const uploadmiddleware = multer({ dest: "uploads/" });
 // It is used to access cookies
 const cookieParser = require("cookie-parser");
 
+const corsOptions = {
+  origin: ["http://localhost:5173", `${process.env.ORIGIN}`],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true, // Enable credentials (cookies, authorization headers)
+  optionsSuccessStatus: 204, // Respond to preflight requests with 204 No Content
+};
+
 // This wil allow the front end to access the backend
-app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
+app.use(cors(corsOptions));
 // app.use(cors({ credentials: true,origin:"*" }));
 
 app.use(express.json());
