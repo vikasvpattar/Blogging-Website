@@ -32,7 +32,7 @@ const uploadmiddleware = multer({ dest: "uploads/" });
 const cookieParser = require("cookie-parser");
 
 const corsOptions = {
-  origin: ["http://localhost:5173", `${process.env.ORIGIN}`],
+  origin: ["http://localhost:5173", process.env.ORIGIN],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true, // Enable credentials (cookies, authorization headers)
   optionsSuccessStatus: 204, // Respond to preflight requests with 204 No Content
