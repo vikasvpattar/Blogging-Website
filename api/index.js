@@ -33,7 +33,7 @@ const cookieParser = require("cookie-parser");
 
 // This wil allow the front end to access the backend
 // app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
-app.use(cors());
+app.use(cors({ credentials: true }));
 
 app.use(express.json());
 app.use(cookieParser());
